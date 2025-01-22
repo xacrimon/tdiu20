@@ -16,7 +16,6 @@ int Time::get_hour() const {}
 int Time::get_minute() const {}
 int Time::get_second() const {}
 
-
 Time& Time::operator++() {}
 Time Time::operator++(int) const {}
 
