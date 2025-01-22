@@ -13,8 +13,8 @@ enum class TimeFormat
 class Time
 {
 public:
-    Time(int hour, int minute, int second); // TODO: initialization list
-    Time(std::string time);
+    Time(int hour, int minute, int second);
+    Time(const std::string& time);
 
     std::string to_string(TimeFormat format) const;
 

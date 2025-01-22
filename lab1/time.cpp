@@ -1,5 +1,9 @@
+#include <string>
+#include <iostream>
+
 #include "time.hpp"
 
-int main() {
-    return 0;
+Time::Time(int hour, int minute, int second) : secs{hour * 3600 + minute * 60 + second} {}
+Time::Time(const std::string& time) : secs{0} {
+    // TODO
 }
