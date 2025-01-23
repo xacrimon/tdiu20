@@ -1,26 +1,39 @@
 CXX ?= g++
 CXXFLAGS ?= -std=c++17 -Wall -Wextra -pedantic -Weffc++ -Woverloaded-virtual -fmax-errors=3 -O0 -g
-CXXFLAGS_LIB ?= -std=c++17 -w -O1 -g
+CXXFLAGS_LIB ?= -std=c++17 -w -O0
 
-.PHONY: lab1
-lab1: lab1/time.o
+LIB_OBJ = $(patsubst lib/%.cpp, build/lib/%.o, $(wildcard lib/*.cpp))
+LAB1_OBJ = $(patsubst lab1/%.cpp, build/lab1/%.o, $(wildcard lab1/*.cpp))
 
-.PHONY: lab1/test
-lab1/test: lab1/time_test
-	./lab1/time_test
+.PHONY: default
+default:
+	@echo "error: no default target"
 
 .PHONY: clean
 clean:
-	rm -f lab1/time.o lab1/test.o lab1/time_test lib/catch_amalgamated.o
+	rm -rf build
 
-lab1/time_test: lab1/test.o lab1/time.o lib/catch_amalgamated.o
-	$(CXX) $(CXXFLAGS) lab1/test.o lab1/time.o lib/catch_amalgamated.o -o lab1/time_test
-  
-lab1/test.o: lab1/test.cpp
-	$(CXX) $(CXXFLAGS) -c lab1/test.cpp -o lab1/test.o
+build:
+	mkdir build
 
-lab1/time.o: lab1/time.cpp lab1/time.hpp
-	$(CXX) $(CXXFLAGS) -c lab1/time.cpp -o lab1/time.o
+build/lib: | build
+	mkdir build/lib
 
-lib/catch_amalgamated.o: lib/catch_amalgamated.cpp lib/catch_amalgamated.hpp
-	$(CXX) $(CXXFLAGS_LIB) -c lib/catch_amalgamated.cpp -o lib/catch_amalgamated.o
+build/lib/%.o: lib/%.cpp | build/lib
+	$(CXX) $(CXXFLAGS_LIB) -c $< -o $@
+
+.PHONY: lab1
+lab1: $(LAB1_OBJ)
+
+build/lab1: | build
+	mkdir build/lab1
+
+build/lab1/%.o: lab1/%.cpp | build/lab1
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+.PHONY: lab1/test
+lab1/test: build/lab1/test
+	./build/lab1/test
+
+build/lab1/test: $(LIB_OBJ) $(LAB1_OBJ) | build/lab1
+	$(CXX) $(CXXFLAGS) $(LIB_OBJ) $(LAB1_OBJ) -o build/lab1/test

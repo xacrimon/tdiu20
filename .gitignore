@@ -1,4 +1,3 @@
-*.o
-*dSYM
+
 /.vscode
-*_test
+/build
