@@ -8,13 +8,16 @@
 
 const int SECONDS_PER_DAY{24 * 60 * 60};
 
+Time::Time()
+    : hours{0}, minutes{0}, seconds{0}
+{
+}
+
 Time::Time(int hours, int minutes, int seconds) : hours{hours}, minutes{minutes}, seconds{seconds}
 {
     if (hours > 23 || hours < 0 || minutes > 59 || minutes < 0 || seconds > 59 || seconds < 0)
     {
-        std::stringstream ss{"Ogiltigt tidsformat! test"};
-        ss << hours << ':' << minutes << ':' << seconds;
-        throw std::logic_error(ss.str());
+        throw std::logic_error("Ogiltigt tidsformat!");
     }
 }
 

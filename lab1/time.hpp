@@ -13,6 +13,7 @@ enum class TimeFormat
 class Time
 {
 public:
+    Time();
     Time(int hours, int minutes, int seconds);
     Time(const std::string &time);
 
