@@ -6,7 +6,7 @@
 
 #include "time.hpp"
 
-const int SECONDS_PER_DAY = 24 * 60 * 60;
+const int SECONDS_PER_DAY{24 * 60 * 60};
 
 Time::Time(int hours, int minutes, int seconds) : hours{hours}, minutes{minutes}, seconds{seconds}
 {
@@ -26,7 +26,9 @@ Time::Time(const std::string &time) : hours{0}, minutes{0}, seconds{0}
     std::vector<std::string> tokens{};
 
     while (std::getline(ss, token, ':'))
+    {
         tokens.push_back(token);
+    }
 
     try
     {
@@ -36,29 +38,27 @@ Time::Time(const std::string &time) : hours{0}, minutes{0}, seconds{0}
     }
     catch (...)
     {
-        std::stringstream ss{"Ogiltigt tidsformat! "};
-        ss << tokens[0] << ':' << tokens[1] << ':' << tokens[2];
-        throw std::logic_error(ss.str());
+        throw std::logic_error("Ogiltigt tidsformat!");
     }
 
     if (hours > 23 || hours < 0 || minutes > 59 || minutes < 0 || seconds > 59 || seconds < 0)
     {
-        std::stringstream ss{"Ogiltigt tidsformat! test"};
-        ss << hours << ':' << minutes << ':' << seconds;
-        throw std::logic_error(ss.str());
+        throw std::logic_error("Ogiltigt tidsformat!");
     }
 }
 
 std::string Time::to_string(TimeFormat format) const
 {
-    std::stringstream ss;
+    std::stringstream ss{};
 
-    int convHours = hours;
+    int convHours{hours};
     if (format == TimeFormat::TWELVE_HOUR)
     {
         convHours %= 12;
         if (hours == 0 || hours == 12)
+        {
             convHours = 12;
+        }
     }
 
     ss << std::setw(2) << std::setfill('0') << convHours << ':'
@@ -107,9 +107,9 @@ Time &Time::operator++()
 
 Time Time::operator++(int)
 {
-    auto c = *this;
+    Time old{*this};
     *this += 1;
-    return c;
+    return old;
 }
 
 Time &Time::operator--()
@@ -119,9 +119,9 @@ Time &Time::operator--()
 
 Time Time::operator--(int)
 {
-    auto c = *this;
+    Time old{*this};
     *this -= 1;
-    return c;
+    return old;
 }
 
 bool Time::operator==(const Time &rhs) const
@@ -184,7 +184,7 @@ std::ostream &operator<<(std::ostream &stream, const Time &time)
 
 std::istream &operator>>(std::istream &stream, Time &time)
 {
-    std::string s;
+    std::string s{};
     char c;
 
     for (int i{0}; i < 8; i++)
@@ -211,11 +211,11 @@ Time Time::from_seconds(int sum)
         sum = SECONDS_PER_DAY + sum;
     }
 
-    int hours = sum / 3600;
+    int hours{sum / 3600};
     sum -= hours * 3600;
-    int minutes = sum / 60;
+    int minutes{sum / 60};
     sum -= minutes * 60;
-    int secs = sum;
+    int seconds{sum};
 
-    return Time{hours, minutes, secs};
+    return Time{hours, minutes, seconds};
 }
