@@ -130,14 +130,6 @@ TEST_CASE("operators")
         CHECK_FALSE(t2 != t3);
     }
 
-    SECTION("Output")
-    {
-        ostringstream oss{};
-        Time t0{23, 59, 59};
-        oss << t0;
-        CHECK(oss.str() == "23:59:59");
-    }
-
     SECTION("Increment")
     {
         Time t0{23, 59, 59};
@@ -181,9 +173,27 @@ TEST_CASE("operators")
 
     SECTION("Subtraction")
     {
+        Time t0{10, 29, 0};
+        Time t1{10, 29, 50};
+        Time t2{10, 30, 20};
+        CHECK(t1 - 50 == t0);
+        CHECK(t2 - 30 == t1);
     }
 
-    SECTION("String Streams")
+    SECTION("Output Stream")
     {
+        ostringstream oss{};
+        Time t0{23, 59, 59};
+        oss << t0;
+        CHECK(oss.str() == "23:59:59");
+    }
+
+    SECTION("Input Stream")
+    {
+        istringstream iss{"14:43:10"};
+        Time t0{};
+        Time t1{14, 43, 10};
+        iss >> t0;
+        CHECK(t0 == t1);
     }
 }
