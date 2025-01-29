@@ -7,28 +7,36 @@ class List
 {
 public:
     List();
-    List(const List&);
-    List(List&&);
+    List(const List &other);
+    List(List &&other);
     ~List();
 
-    List& operator=(const List&);   // Copy
-    List& operator=(List&&);        // Move
+    List &operator=(const List &rhs);
+    List &operator=(List &&rhs);
 
     void insert(int data);
     void remove(int index);
-    int at(int index);
+    int at(int index) const;
+
+    void push_back(int data);
+
 private:
     struct Node
     {
         int data;
-        Node* next;
-        Node* previous;
+        Node *next;
+        Node *previous;
+
+        Node(int data, Node *next, Node *previous)
+            : data{data}, next{next}, previous{previous}
+        {
+        }
     };
 
-    Node* first;
-    Node* last;
+    Node *first;
+    Node *last;
 };
 
-std::ostream& operator<<(std::ostream& os, const List& list);
+std::ostream &operator<<(std::ostream &os, const List &list);
 
 #endif

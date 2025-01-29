@@ -1,15 +1,27 @@
 #include "list.h"
 
 List::List()
+    : first{nullptr}, last{nullptr}
 {
 }
 
-List::List(const List &)
+List::List(const List &other)
+    : first{nullptr}, last{nullptr}
 {
+    Node *curr{other.first};
+
+    while (curr != nullptr)
+    {
+        push_back(curr->data);
+        curr = curr->next;
+    }
 }
 
-List::List(List &&)
+List::List(List && other)
+    : first{other.first}, last{other.last}
 {
+    other.first = nullptr;
+    other.last = nullptr;
 }
 
 List::~List()
@@ -32,8 +44,24 @@ void List::remove(int index)
 {
 }
 
-int List::at(int index)
+int List::at(int index) const
 {
+}
+
+void List::push_back(int data)
+{
+    if (first == nullptr)
+    {
+        first = new Node{data, nullptr, nullptr};
+        last = first;
+    }
+    else
+    {
+        Node *tmp;
+        tmp = new Node{data, nullptr, last};
+        last->next = tmp;
+        last = tmp;
+    }
 }
 
 std::ostream &operator<<(std::ostream &os, const List &list)
