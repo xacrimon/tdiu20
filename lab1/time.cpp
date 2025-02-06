@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <iomanip>
+#include <stdexcept>
 
 #include "time.hpp"
 
@@ -13,7 +14,8 @@ Time::Time()
 {
 }
 
-Time::Time(int hours, int minutes, int seconds) : hours{hours}, minutes{minutes}, seconds{seconds}
+Time::Time(int hours, int minutes, int seconds)
+    : hours{hours}, minutes{minutes}, seconds{seconds}
 {
     if (hours > 23 || hours < 0 || minutes > 59 || minutes < 0 || seconds > 59 || seconds < 0)
     {
@@ -21,7 +23,8 @@ Time::Time(int hours, int minutes, int seconds) : hours{hours}, minutes{minutes}
     }
 }
 
-Time::Time(const std::string &time) : hours{0}, minutes{0}, seconds{0}
+Time::Time(const std::string &time)
+    : hours{0}, minutes{0}, seconds{0}
 {
     std::stringstream ss{time};
 
@@ -54,17 +57,17 @@ std::string Time::to_string(TimeFormat format) const
 {
     std::stringstream ss{};
 
-    int convHours{hours};
+    int conv_hours{hours};
     if (format == TimeFormat::TWELVE_HOUR)
     {
-        convHours %= 12;
+        conv_hours %= 12;
         if (hours == 0 || hours == 12)
         {
-            convHours = 12;
+            conv_hours = 12;
         }
     }
 
-    ss << std::setw(2) << std::setfill('0') << convHours << ':'
+    ss << std::setw(2) << std::setfill('0') << conv_hours << ':'
        << std::setw(2) << minutes << ':'
        << std::setw(2) << seconds;
 
