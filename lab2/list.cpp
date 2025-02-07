@@ -11,6 +11,17 @@ List::List()
     tail = sentinel;
 }
 
+List::List(std::initializer_list<int> elems)
+    : head{nullptr}, tail{nullptr}
+{
+    head = sentinel;
+    tail = sentinel;
+
+    for (auto v : elems) {
+        push_back(v);
+    }
+}
+
 // special: copy constructor
 List::List(List const& other)
     : head{nullptr}, tail{nullptr}
@@ -89,6 +100,19 @@ std::optional<int> List::back() const {
 std::optional<int> List::at(int index) const {
     (void)index;
     throw std::runtime_error("Not implemented!");
+}
+
+List List::sub(std::initializer_list<int> indices) const {
+    (void)indices;
+    throw std::runtime_error("Not implemented!");
+}
+
+List::iterator List::begin() const {
+    return List::iterator{head};
+}
+
+List::iterator List::end() const {
+    return List::iterator{tail};
 }
 
 std::ostream &operator<<(std::ostream &os, const List &list)
