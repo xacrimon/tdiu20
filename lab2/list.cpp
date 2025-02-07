@@ -12,12 +12,16 @@ List::List()
 }
 
 // special: copy constructor
-List::List(List const& other) {
+List::List(List const& other)
+    : head{nullptr}, tail{nullptr}
+{
+    (void)other;
     throw std::runtime_error("Not implemented!");
 }
 
 // special: copy assignment
 List& List::operator=(List const& rhs) {
+    (void)rhs;
     throw std::runtime_error("Not implemented!");
 }
 
@@ -29,20 +33,26 @@ List::~List() {
 }
 
 // special: move constructor
-List::List(List && other) {
+List::List(List && other)
+    : head{nullptr}, tail{nullptr}
+{
+    (void)other;
     throw std::runtime_error("Not implemented!");
 }
 
 // special: move assignment
 List& List::operator=(List && rhs) {
+    (void)rhs;
     throw std::runtime_error("Not implemented!");
 }
 
 void List::push_back(int elem) {
+    (void)elem;
     throw std::runtime_error("Not implemented!");
 }
 
 void List::push_front(int elem) {
+    (void)elem;
     throw std::runtime_error("Not implemented!");
 }
 
@@ -55,10 +65,12 @@ std::optional<int> List::pop_front() {
 }
 
 void List::insert(int elem) {
+    (void)elem;
     throw std::runtime_error("Not implemented!");
 }
 
 std::optional<int> List::remove(int index) {
+    (void)index;
     throw std::runtime_error("Not implemented!");
 }
 
@@ -75,10 +87,13 @@ std::optional<int> List::back() const {
 }
 
 std::optional<int> List::at(int index) const {
+    (void)index;
     throw std::runtime_error("Not implemented!");
 }
 
 std::ostream &operator<<(std::ostream &os, const List &list)
 {
+    (void)os;
+    (void)list;
     throw std::runtime_error("Not implemented!");
 }
