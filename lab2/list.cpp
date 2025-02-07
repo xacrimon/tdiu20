@@ -1,5 +1,7 @@
 #include "list.h"
 
+#include <optional>
+#include <iostream>
 #include <stdexcept>
 
 List::List()
@@ -44,11 +46,11 @@ void List::push_front(int elem) {
     throw std::runtime_error("Not implemented!");
 }
 
-int List::pop_back() {
+std::optional<int> List::pop_back() {
     throw std::runtime_error("Not implemented!");
 }
 
-int List::pop_front() {
+std::optional<int> List::pop_front() {
     throw std::runtime_error("Not implemented!");
 }
 
@@ -56,7 +58,7 @@ void List::insert(int elem) {
     throw std::runtime_error("Not implemented!");
 }
 
-int List::remove(int index) {
+std::optional<int> List::remove(int index) {
     throw std::runtime_error("Not implemented!");
 }
 
@@ -64,15 +66,15 @@ bool List::is_empty() const {
     throw std::runtime_error("Not implemented!");
 }
 
-int List::front() const {
+std::optional<int> List::front() const {
     throw std::runtime_error("Not implemented!");
 }
 
-int List::back() const {
+std::optional<int> List::back() const {
     throw std::runtime_error("Not implemented!");
 }
 
-int List::at(int index) const {
+std::optional<int> List::at(int index) const {
     throw std::runtime_error("Not implemented!");
 }
 

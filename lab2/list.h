@@ -1,6 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include <optional>
 #include <iostream>
 
 class List
@@ -21,16 +22,16 @@ public:
 
     void push_back(int elem);
     void push_front(int elem);
-    int pop_back();
-    int pop_front();
+    std::optional<int> pop_back();
+    std::optional<int> pop_front();
 
     void insert(int elem);
-    int remove(int index);
+    std::optional<int> remove(int index);
 
     bool is_empty() const;
-    int front() const;
-    int back() const;
-    int at(int index) const;
+    std::optional<int> front() const;
+    std::optional<int> back() const;
+    std::optional<int> at(int index) const;
 private:
     struct Node
     {
