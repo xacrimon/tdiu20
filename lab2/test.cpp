@@ -17,4 +17,7 @@ TEST_CASE("list")
 
     l1 = List{3, 4, 5, 6, 7, 8, 9};
     CHECK(l1.length() == 7);
+
+    CHECK(l1.at(2).value() == 5);
+    CHECK(l1.at(5).value() == 8);
 }
