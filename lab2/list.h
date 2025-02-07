@@ -27,8 +27,9 @@ public:
     void insert(int elem);
     int remove(int index);
 
-    void front() const;
-    void back() const;
+    bool is_empty() const;
+    int front() const;
+    int back() const;
     int at(int index) const;
 private:
     struct Node
@@ -45,7 +46,7 @@ private:
 
     Node* head;
     Node* tail;
-    const Node* sentinel = new Node{0, nullptr, nullptr};
+    Node* const sentinel = new Node{0, nullptr, nullptr};
 };
 
 std::ostream &operator<<(std::ostream &os, const List &list);

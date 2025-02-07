@@ -5,7 +5,8 @@
 List::List()
     : head{nullptr}, tail{nullptr}
 {
-    throw std::runtime_error("Not implemented!");
+    head = sentinel;
+    tail = sentinel;
 }
 
 // special: copy constructor
@@ -20,7 +21,9 @@ List& List::operator=(List const& rhs) {
 
 // special: destructor
 List::~List() {
-    throw std::runtime_error("Not implemented!");
+    while (!is_empty()) {
+        pop_back();
+    }
 }
 
 // special: move constructor
@@ -57,11 +60,15 @@ int List::remove(int index) {
     throw std::runtime_error("Not implemented!");
 }
 
-void List::front() const {
+bool List::is_empty() const {
     throw std::runtime_error("Not implemented!");
 }
 
-void List::back() const {
+int List::front() const {
+    throw std::runtime_error("Not implemented!");
+}
+
+int List::back() const {
     throw std::runtime_error("Not implemented!");
 }
 
