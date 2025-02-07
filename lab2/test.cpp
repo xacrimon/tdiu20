@@ -1,6 +1,16 @@
 #include "../lib/catch_amalgamated.hpp"
 #include "list.h"
 
+#include <string>
+#include <iostream>
+
+std::string to_string(const List &l)
+{
+    std::stringstream ss;
+    ss << l;
+    return ss.str();
+}
+
 TEST_CASE("list")
 {
     List l1;
@@ -26,4 +36,7 @@ TEST_CASE("list")
     CHECK(sub.at(0).value() == 4);
     CHECK(sub.at(1).value() == 6);
     CHECK(sub.at(2).value() == 8);
+
+    CHECK(to_string(l1) == "[3, 4, 5, 6, 7, 8, 9]");
+    CHECK(to_string(sub) == "[4, 6, 8]");
 }

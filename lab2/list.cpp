@@ -312,7 +312,24 @@ List::iterator List::end() const
 
 std::ostream &operator<<(std::ostream &os, const List &list)
 {
-    (void)os;
-    (void)list;
-    throw std::runtime_error("Not implemented!");
+    os << "[";
+    auto it = list.begin();
+
+    for (;;)
+    {
+        os << *it;
+        it++;
+
+        if (it != list.end())
+        {
+            os << ", ";
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    os << "]";
+    return os;
 }
