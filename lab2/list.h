@@ -11,11 +11,6 @@ namespace impl
         int elem;
         Node *next;
         Node *prev;
-
-        Node(int elem, Node *next, Node *prev)
-            : elem{elem}, next{next}, prev{prev}
-        {
-        }
     };
 
     class ListIterator
@@ -86,9 +81,9 @@ public:
     iterator end() const;
 
 private:
+    constexpr static impl::Node *sentinel = &impl::SENTINEL;
     impl::Node *head;
     impl::Node *tail;
-    impl::Node *sentinel = &impl::SENTINEL;
 };
 
 std::ostream &operator<<(std::ostream &os, const List &list);
