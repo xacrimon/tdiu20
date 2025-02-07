@@ -273,17 +273,16 @@ std::optional<int> List::at(int index) const
 List List::sub(std::initializer_list<int> indices) const
 {
     auto is_sorted = std::is_sorted(indices.begin(), indices.end());
-    auto sorted = [indices]()
+    auto indices_sorted = is_sorted ? indices : [indices]()
     {
         std::vector<int> list = indices;
         std::sort(list.begin(), list.end());
         return list;
-    };
+    }();
 
     List sub;
     auto curr_idx = 0;
     auto it = begin();
-    auto indices_sorted = is_sorted ? indices : sorted();
 
     for (const auto &index : indices_sorted)
     {
