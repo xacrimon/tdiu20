@@ -3,6 +3,8 @@
 #include <optional>
 #include <iostream>
 #include <stdexcept>
+#include <vector>
+#include <algorithm>
 
 impl::ListIterator::ListIterator(Node *node)
     : curr{node}
@@ -113,8 +115,8 @@ List::List(List &&other)
 {
     head = other.head;
     tail = other.tail;
-    other.tail = other.sentinel;
-    other.head = other.sentinel;
+    other.tail = sentinel;
+    other.head = sentinel;
 }
 
 // special: move assignment
@@ -127,32 +129,78 @@ List &List::operator=(List &&rhs)
 
     head = rhs.head;
     tail = rhs.tail;
-    rhs.tail = rhs.sentinel;
-    rhs.head = rhs.sentinel;
+    rhs.tail = sentinel;
+    rhs.head = sentinel;
 
     return *this;
 }
 
 void List::push_back(int elem)
 {
-    (void)elem;
-    throw std::runtime_error("Not implemented!");
+    auto node = new impl::Node{elem, sentinel, tail};
+    tail->next = node;
+    tail = node;
+    if (head == sentinel)
+    {
+        head = tail;
+    }
 }
 
 void List::push_front(int elem)
 {
-    (void)elem;
-    throw std::runtime_error("Not implemented!");
+    auto node = new impl::Node{elem, head, sentinel};
+    head->prev = node;
+    head = node;
+    if (tail == sentinel)
+    {
+        tail = head;
+    }
 }
 
 std::optional<int> List::pop_back()
 {
-    throw std::runtime_error("Not implemented!");
+    if (tail == sentinel)
+    {
+        return std::nullopt;
+    }
+
+    auto node = tail;
+    tail = tail->prev;
+    if (tail == sentinel)
+    {
+        head = sentinel;
+    }
+    else
+    {
+        tail->next = sentinel;
+    }
+
+    auto elem = node->elem;
+    delete node;
+    return elem;
 }
 
 std::optional<int> List::pop_front()
 {
-    throw std::runtime_error("Not implemented!");
+    if (head == sentinel)
+    {
+        return std::nullopt;
+    }
+
+    auto node = head;
+    head = head->next;
+    if (head == sentinel)
+    {
+        tail = sentinel;
+    }
+    else
+    {
+        head->prev = sentinel;
+    }
+
+    auto elem = node->elem;
+    delete node;
+    return elem;
 }
 
 void List::insert(int elem)
@@ -169,29 +217,87 @@ std::optional<int> List::remove(int index)
 
 bool List::is_empty() const
 {
-    throw std::runtime_error("Not implemented!");
+    return head == sentinel;
+}
+
+int List::length() const
+{
+    int len = 0;
+
+    for (const auto &elem : *this)
+    {
+        (void)elem;
+        len++;
+    }
+
+    return len;
 }
 
 std::optional<int> List::front() const
 {
-    throw std::runtime_error("Not implemented!");
+    if (head == sentinel)
+    {
+        return std::nullopt;
+    }
+
+    return head->elem;
 }
 
 std::optional<int> List::back() const
 {
-    throw std::runtime_error("Not implemented!");
+    if (tail == sentinel)
+    {
+        return std::nullopt;
+    }
+
+    return tail->elem;
 }
 
 std::optional<int> List::at(int index) const
 {
-    (void)index;
-    throw std::runtime_error("Not implemented!");
+    auto it = begin();
+
+    for (int i = 0; i < index; i++)
+    {
+        if (it == end())
+        {
+            return std::nullopt;
+        }
+
+        it++;
+    }
+
+    return *it;
 }
 
 List List::sub(std::initializer_list<int> indices) const
 {
-    (void)indices;
-    throw std::runtime_error("Not implemented!");
+    std::vector<int> indices_list = indices;
+    std::sort(indices_list.begin(), indices_list.end());
+
+    List sub;
+    auto curr_idx = 0;
+    auto it = begin();
+
+    for (const auto &index : indices_list)
+    {
+        auto diff = index - curr_idx;
+
+        for (int i = 0; i < diff; i++)
+        {
+            if (it == end())
+            {
+                throw std::runtime_error("crap");
+            }
+
+            it++;
+            curr_idx++;
+        }
+
+        sub.push_back(*it);
+    }
+
+    return sub;
 }
 
 List::iterator List::begin() const
@@ -201,7 +307,7 @@ List::iterator List::begin() const
 
 List::iterator List::end() const
 {
-    return List::iterator{tail};
+    return List::iterator{sentinel};
 }
 
 std::ostream &operator<<(std::ostream &os, const List &list)
