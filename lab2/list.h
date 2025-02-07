@@ -27,7 +27,6 @@ namespace impl
         using reference = int &;
         using iterator_category = std::bidirectional_iterator_tag;
 
-        ListIterator() = default;
         explicit ListIterator(Node *node);
 
         reference operator*() const;
