@@ -7,34 +7,45 @@ class List
 {
 public:
     List();
-    List(const List &other);
-    List(List &&other);
+
+    // special: copy constructor
+    List(List const& other);
+    // special: copy assignment
+    List& operator=(List const& rhs);
+    // special: destructor
     ~List();
+    // special: move constructor
+    List(List && other);
+    // special: move assignment
+    List& operator=(List && rhs);
 
-    List &operator=(const List &rhs);
-    List &operator=(List &&rhs);
+    void push_back(int elem);
+    void push_front(int elem);
+    int pop_back();
+    int pop_front();
 
-    void insert(int data);
-    void remove(int index);
+    void insert(int elem);
+    int remove(int index);
+
+    void front() const;
+    void back() const;
     int at(int index) const;
-
-    void push_back(int data);
-
 private:
     struct Node
     {
-        int data;
-        Node *next;
-        Node *previous;
+        int elem;
+        Node* next;
+        Node* prev;
 
-        Node(int data, Node *next, Node *previous)
-            : data{data}, next{next}, previous{previous}
+        Node(int elem, Node* next, Node* prev)
+            : elem{elem}, next{next}, prev{prev}
         {
         }
     };
 
-    Node *first;
-    Node *last;
+    Node* head;
+    Node* tail;
+    const Node* sentinel = new Node{0, nullptr, nullptr};
 };
 
 std::ostream &operator<<(std::ostream &os, const List &list);
