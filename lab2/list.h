@@ -61,13 +61,8 @@ public:
     // special: move assignment
     List &operator=(List &&rhs);
 
-    void push_back(int elem);
-    void push_front(int elem);
-    std::optional<int> pop_back();
-    std::optional<int> pop_front();
-
     void insert(int elem);
-    std::optional<int> remove(int index);
+    void remove(int index);
 
     bool is_empty() const;
     int length() const;
@@ -81,6 +76,9 @@ public:
     iterator end() const;
 
 private:
+    void push_back(int elem);
+    std::optional<int> pop_back();
+
     constexpr static impl::Node *sentinel = &impl::SENTINEL;
     impl::Node *head;
     impl::Node *tail;

@@ -146,17 +146,6 @@ void List::push_back(int elem)
     }
 }
 
-void List::push_front(int elem)
-{
-    auto node = new impl::Node{elem, head, sentinel};
-    head->prev = node;
-    head = node;
-    if (tail == sentinel)
-    {
-        tail = head;
-    }
-}
-
 std::optional<int> List::pop_back()
 {
     if (tail == sentinel)
@@ -180,39 +169,94 @@ std::optional<int> List::pop_back()
     return elem;
 }
 
-std::optional<int> List::pop_front()
+void List::insert(int elem)
 {
-    if (head == sentinel)
+    auto prev = sentinel;
+    auto current = head;
+
+    while (true)
     {
-        return std::nullopt;
+        if (current == sentinel)
+        {
+            auto node = new impl::Node{elem, sentinel, prev};
+            if (head == sentinel)
+            {
+                // listan är tom
+                head = node;
+                tail = node;
+            }
+            else if (tail == prev)
+            {
+                // vi är i slutet på listan
+                prev->next = node;
+                tail = node;
+            }
+
+            break;
+        }
+        else if (elem < current->elem)
+        {
+            auto node = new impl::Node{elem, current, prev};
+            if (current == head)
+            {
+                // insert i börjann på listan
+                current->prev = node;
+                head = node;
+            }
+
+            prev->next = node;
+            current->prev = node;
+            break;
+        }
+
+        prev = current;
+        current = current->next;
+    }
+}
+
+void List::remove(int index)
+{
+    if (is_empty())
+    {
+        throw std::logic_error("listan är tom!");
     }
 
-    auto node = head;
-    head = head->next;
-    if (head == sentinel)
+    auto prev = sentinel;
+    auto current = head;
+
+    for (int i{0}; i < index; i++)
     {
-        tail = sentinel;
+        prev = current;
+        current = current->next;
+
+        if (current == sentinel)
+        {
+            throw std::logic_error("index fanns ej i listan!");
+        }
+    }
+
+    if (current->next == sentinel)
+    {
+        // slutet på listan
+        pop_back();
+        return;
+    }
+
+    auto unlinked = current;
+    current = current->next;
+    if (prev != sentinel)
+    {
+        // ej början på listan
+        prev->next = current;
     }
     else
     {
-        head->prev = sentinel;
+        // början på listan
+        head = current;
     }
 
-    auto elem = node->elem;
-    delete node;
-    return elem;
-}
-
-void List::insert(int elem)
-{
-    (void)elem;
-    throw std::runtime_error("Not implemented!");
-}
-
-std::optional<int> List::remove(int index)
-{
-    (void)index;
-    throw std::runtime_error("Not implemented!");
+    current->prev = prev;
+    delete unlinked;
 }
 
 bool List::is_empty() const
@@ -273,18 +317,16 @@ std::optional<int> List::at(int index) const
 List List::sub(std::initializer_list<int> indices) const
 {
     auto is_sorted = std::is_sorted(indices.begin(), indices.end());
-    auto indices_sorted = is_sorted ? indices : [indices]()
+    if (!is_sorted)
     {
-        std::vector<int> list = indices;
-        std::sort(list.begin(), list.end());
-        return list;
-    }();
+        throw std::logic_error("index ej sorterade!");
+    }
 
     List sub;
     auto curr_idx = 0;
     auto it = begin();
 
-    for (const auto &index : indices_sorted)
+    for (const auto &index : indices)
     {
         auto diff = index - curr_idx;
 
@@ -292,7 +334,7 @@ List List::sub(std::initializer_list<int> indices) const
         {
             if (it == end())
             {
-                throw std::runtime_error("crap");
+                throw std::runtime_error("givna index fanns ej i listan!");
             }
 
             it++;
