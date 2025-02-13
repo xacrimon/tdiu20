@@ -51,3 +51,19 @@ lab2/test: build/lab2/test
 
 build/lab2/test: $(call objs,lib lab2) | build/lab2
 	$(CXX) $(CXXFLAGS) $(call objs,lib lab2) -o build/lab2/test
+
+.PHONY: lab3
+lab3: $(call objs,lab3)
+
+build/lab3: | build
+	mkdir build/lab3
+
+build/lab3/%.o: lab3/%.cpp | build/lab3
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+.PHONY: lab3/test
+lab3/test: build/lab3/test
+	./build/lab3/test
+
+build/lab3/test: $(call objs,lib lab3) | build/lab3
+	$(CXX) $(CXXFLAGS) $(call objs,lib lab3) -o build/lab3/test
