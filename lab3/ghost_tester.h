@@ -10,6 +10,7 @@ class Ghost_Tester
 {
 public:
     Ghost_Tester();
+    ~Ghost_Tester();
 
     void run();
 
@@ -18,5 +19,5 @@ private:
     void draw_map();
 
     std::unique_ptr<Pacman> pacman;
-    std::vector<Ghost> ghosts;
+    std::vector<Ghost *> ghosts;
 };

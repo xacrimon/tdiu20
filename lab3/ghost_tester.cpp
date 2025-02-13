@@ -4,7 +4,15 @@ Ghost_Tester::Ghost_Tester()
     : pacman{}, ghosts{}
 {
     pacman = std::unique_ptr<Pacman>(new Pacman{});
-    ghosts.push_back(Blinky{pacman.get(), Point{}, Point{}});
+    ghosts.push_back(new Blinky{pacman.get(), Point{}, Point{}});
+}
+
+Ghost_Tester::~Ghost_Tester()
+{
+    for (Ghost *ghost : ghosts)
+    {
+        delete ghost;
+    }
 }
 
 void Ghost_Tester::run()
@@ -59,11 +67,11 @@ std::string Ghost_Tester::to_draw(Point const &curr_pos)
         to_draw[1] = '@';
     }
 
-    for (const Ghost &ghost : ghosts)
+    for (const Ghost *ghost : ghosts)
     {
-        if (ghost.get_position() == curr_pos)
+        if (ghost->get_position() == curr_pos)
         {
-            auto c = ghost.get_color()[0];
+            auto c = ghost->get_color()[0];
             to_draw[0] = toupper(c);
         }
     }
