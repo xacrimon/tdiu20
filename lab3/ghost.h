@@ -29,6 +29,7 @@ protected:
 class Blinky : public Ghost
 {
 public:
+    Blinky(Pacman *pacman, Point position, Point scatter_point);
     virtual Point get_chase_point() const override;
     virtual std::string get_color() const override;
     virtual Point get_scatter_point() const override;
@@ -43,6 +44,7 @@ private:
 class Pinky : public Ghost
 {
 public:
+    Pinky(Pacman *pacman, Point position, Point scatter_point);
     virtual Point get_chase_point() const override;
     virtual std::string get_color() const override;
 };

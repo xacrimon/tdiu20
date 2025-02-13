@@ -22,6 +22,11 @@ Point Ghost::get_scatter_point() const
     return scatter_point;
 }
 
+Blinky::Blinky(Pacman *pacman, Point position, Point scatter_point)
+    : Ghost{pacman, position, scatter_point}, angry{false}
+{
+}
+
 Point Blinky::get_chase_point() const
 {
     return pacman->get_position();
@@ -42,6 +47,11 @@ Point Blinky::get_scatter_point() const
 std::string Blinky::get_color() const
 {
     return std::string{"red"};
+}
+
+Pinky::Pinky(Pacman *pacman, Point position, Point scatter_point)
+    : Ghost{pacman, position, scatter_point}
+{
 }
 
 Point Pinky::get_chase_point() const
