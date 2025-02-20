@@ -1,8 +1,9 @@
-#include "../lib/catch_amalgamated.hpp"
+#include "../lib/catch.hpp"
 #include "list.h"
 
 #include <string>
 #include <iostream>
+#include <sstream>
 
 std::string to_string(const List &l)
 {
