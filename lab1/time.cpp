@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <stdexcept>
 
+// Komplettering: Kasta alltid ett faktiskt undantag.
+
 #include "time.hpp"
 
 const int SECONDS_PER_DAY{24 * 60 * 60};

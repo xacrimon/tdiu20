@@ -4,6 +4,13 @@
 #include <string>
 #include <iostream>
 
+// Komplettering: Kompilerar med varningar.
+
+// Komplettering: Static är inte en del av denna kursen och får inte användas.
+
+// Kommentar: Coolt lösning med enum, men det är inte en del av kursen. 
+//  Använd inte det i framtiden.
+
 enum class TimeFormat
 {
     TWENTY_FOUR_HOUR,

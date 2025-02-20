@@ -1,7 +1,17 @@
-#include "../lib/catch_amalgamated.hpp"
+#include "../lib/catch.hpp"
 #include "time.hpp"
 
+#include <sstream>
+
 using namespace std;
+
+// Komplettering: Kompilerar med varningar.
+//  Ni har använt en annan catch-fil ("../lib/catch_amalgamated.hpp)
+//  än den som kursen tillhandalåler och jag behövde då ändra till
+//  catch.hpp filen som finns på kurssidan, vilken kompilerade med varningar.
+//  Det är detta testramverk som ska användas i denna kursen.
+
+// Komplettering: Inkludera alla bibliotek ni använder.
 
 TEST_CASE("Constructors and getters")
 {
