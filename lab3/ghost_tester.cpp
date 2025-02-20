@@ -3,10 +3,10 @@
 Ghost_Tester::Ghost_Tester()
     : pacman{}, ghosts{}, scatter{false}
 {
-    pacman = std::unique_ptr<Pacman>(new Pacman{});
-    ghosts.push_back(new Blinky{pacman.get(), Point{9, 8}, Point{WIDTH, HEIGHT}});
-    ghosts.push_back(new Pinky{pacman.get(), Point{2, 7}, Point{0, HEIGHT}});
-    ghosts.push_back(new Clyde{pacman.get(), Point{8, 2}, Point{0, 0}, 6});
+    pacman = new Pacman{};
+    ghosts.push_back(new Blinky{pacman, Point{9, 8}, Point{WIDTH - 1, HEIGHT - 1}});
+    ghosts.push_back(new Pinky{pacman, Point{2, 7}, Point{0, HEIGHT - 1}});
+    ghosts.push_back(new Clyde{pacman, Point{8, 2}, Point{0, 0}, 6});
 }
 
 Ghost_Tester::~Ghost_Tester()
@@ -33,9 +33,7 @@ void Ghost_Tester::run()
 
         if (command == "pos")
         {
-            Point new_pos{};
-            iss >> new_pos.x >> new_pos.y;
-            pacman->set_position(new_pos);
+            command_pos(iss);
         }
         else if (command == "scatter")
         {
@@ -47,36 +45,58 @@ void Ghost_Tester::run()
         }
         else if (command == "anger")
         {
-            for (std::size_t i{0}; i < ghosts.size(); ++i)
-            {
-                Blinky *b{dynamic_cast<Blinky *>(ghosts.at(i))};
-                if (b != nullptr)
-                {
-                    b->set_angry(true);
-                }
-            }
+            command_anger();
         }
         else if (command == "dir")
         {
-            Point new_dir{};
-            iss >> new_dir.x >> new_dir.y;
-            pacman->set_direction(new_dir);
+            command_dir(iss);
         }
         else if (command == "red" || command == "pink" || command == "orange")
         {
-            for (Ghost *ghost : ghosts)
-            {
-                if (ghost->get_color() == command)
-                {
-                    Point new_pos{};
-                    iss >> new_pos.x >> new_pos.y;
-                    ghost->set_position(new_pos);
-                }
-            }
+            command_color(iss, command);
         }
         else if (command == "quit")
         {
             break;
+        }
+    }
+}
+
+void Ghost_Tester::command_pos(std::istringstream &args)
+{
+    Point new_pos{};
+    args >> new_pos.x >> new_pos.y;
+    pacman->set_position(new_pos);
+}
+
+void Ghost_Tester::command_anger()
+{
+    for (std::size_t i{0}; i < ghosts.size(); ++i)
+    {
+        Blinky *b{dynamic_cast<Blinky *>(ghosts.at(i))};
+        if (b != nullptr)
+        {
+            b->set_angry(true);
+        }
+    }
+}
+
+void Ghost_Tester::command_dir(std::istringstream &args)
+{
+    Point new_dir{};
+    args >> new_dir.x >> new_dir.y;
+    pacman->set_direction(new_dir);
+}
+
+void Ghost_Tester::command_color(std::istringstream &args, std::string &command)
+{
+    for (Ghost *ghost : ghosts)
+    {
+        if (ghost->get_color() == command)
+        {
+            Point new_pos{};
+            args >> new_pos.x >> new_pos.y;
+            ghost->set_position(new_pos);
         }
     }
 }
