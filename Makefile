@@ -1,5 +1,5 @@
 CXX ?= g++
-CXXFLAGS ?= -std=c++17 -Wall -Wextra -pedantic -Weffc++ -Woverloaded-virtual -fmax-errors=3 -O0 -g
+CXXFLAGS ?= -std=c++17 -Wall -Wextra -pedantic -Weffc++ -Wold-style-cast -Woverloaded-virtual -fmax-errors=3 -O0 -g
 CXXFLAGS_LIB ?= -std=c++17 -w -O0
 objs = $(foreach dir,$(1),$(patsubst $(dir)/%.cpp,build/$(dir)/%.o,$(wildcard $(dir)/*.cpp)))
 
@@ -65,5 +65,5 @@ build/lab3/%.o: lab3/%.cpp | build/lab3
 lab3/test: build/lab3/test
 	./build/lab3/test
 
-build/lab3/test: $(call objs,lib lab3) | build/lab3
-	$(CXX) $(CXXFLAGS) $(call objs,lib lab3) -o build/lab3/test
+build/lab3/test: $(call objs,lab3) | build/lab3
+	$(CXX) $(CXXFLAGS) $(call objs,lab3) -o build/lab3/test

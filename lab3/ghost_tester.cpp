@@ -1,10 +1,12 @@
 #include "ghost_tester.h"
 
 Ghost_Tester::Ghost_Tester()
-    : pacman{}, ghosts{}
+    : pacman{}, ghosts{}, scatter{false}
 {
     pacman = std::unique_ptr<Pacman>(new Pacman{});
-    ghosts.push_back(new Blinky{pacman.get(), Point{}, Point{}});
+    ghosts.push_back(new Blinky{pacman.get(), Point{9, 8}, Point{WIDTH, HEIGHT}});
+    ghosts.push_back(new Pinky{pacman.get(), Point{2, 7}, Point{0, HEIGHT}});
+    ghosts.push_back(new Clyde{pacman.get(), Point{8, 2}, Point{0, 0}, 6});
 }
 
 Ghost_Tester::~Ghost_Tester()
@@ -37,15 +39,40 @@ void Ghost_Tester::run()
         }
         else if (command == "scatter")
         {
+            scatter = true;
         }
         else if (command == "chase")
         {
+            scatter = false;
         }
         else if (command == "anger")
         {
+            for (std::size_t i{0}; i < ghosts.size(); ++i)
+            {
+                Blinky *b{dynamic_cast<Blinky *>(ghosts.at(i))};
+                if (b != nullptr)
+                {
+                    b->set_angry(true);
+                }
+            }
         }
         else if (command == "dir")
         {
+            Point new_dir{};
+            iss >> new_dir.x >> new_dir.y;
+            pacman->set_direction(new_dir);
+        }
+        else if (command == "red" || command == "pink" || command == "orange")
+        {
+            for (Ghost *ghost : ghosts)
+            {
+                if (ghost->get_color() == command)
+                {
+                    Point new_pos{};
+                    iss >> new_pos.x >> new_pos.y;
+                    ghost->set_position(new_pos);
+                }
+            }
         }
         else if (command == "quit")
         {
@@ -73,6 +100,23 @@ std::string Ghost_Tester::to_draw(Point const &curr_pos)
         {
             auto c = ghost->get_color()[0];
             to_draw[0] = toupper(c);
+        }
+
+        if (scatter)
+        {
+            if (ghost->get_scatter_point() == curr_pos)
+            {
+                auto c = ghost->get_color()[0];
+                to_draw[0] = tolower(c);
+            }
+        }
+        else
+        {
+            if (ghost->get_chase_point() == curr_pos)
+            {
+                auto c = ghost->get_color()[0];
+                to_draw[0] = tolower(c);
+            }
         }
     }
 

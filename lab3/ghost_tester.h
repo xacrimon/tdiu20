@@ -20,4 +20,6 @@ private:
 
     std::unique_ptr<Pacman> pacman;
     std::vector<Ghost *> ghosts;
+
+    bool scatter;
 };

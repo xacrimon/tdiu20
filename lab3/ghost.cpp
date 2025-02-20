@@ -49,6 +49,16 @@ std::string Blinky::get_color() const
     return std::string{"red"};
 }
 
+bool Blinky::is_angry()
+{
+    return angry;
+}
+
+void Blinky::set_angry(bool angry)
+{
+    this->angry = angry;
+}
+
 Pinky::Pinky(Pacman *pacman, Point position, Point scatter_point)
     : Ghost{pacman, position, scatter_point}
 {
