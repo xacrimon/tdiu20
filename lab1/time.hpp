@@ -8,7 +8,7 @@
 
 // Komplettering: Static är inte en del av denna kursen och får inte användas.
 
-// Kommentar: Coolt lösning med enum, men det är inte en del av kursen. 
+// Kommentar: Coolt lösning med enum, men det är inte en del av kursen.
 //  Använd inte det i framtiden.
 
 enum class TimeFormat
@@ -58,9 +58,9 @@ private:
     int seconds;
 
     int to_seconds() const;
-    static Time from_seconds(int seconds);
 };
 
+Time from_seconds(int seconds);
 std::ostream &operator<<(std::ostream &stream, const Time &time);
 std::istream &operator>>(std::istream &stream, Time &time);
 

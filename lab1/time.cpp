@@ -38,16 +38,9 @@ Time::Time(const std::string &time)
         tokens.push_back(token);
     }
 
-    try
-    {
-        hours = stoi(tokens[0]);
-        minutes = stoi(tokens[1]);
-        seconds = stoi(tokens[2]);
-    }
-    catch (...)
-    {
-        throw std::logic_error("Ogiltigt tidsformat!");
-    }
+    hours = stoi(tokens[0]);
+    minutes = stoi(tokens[1]);
+    seconds = stoi(tokens[2]);
 
     if (hours > 23 || hours < 0 || minutes > 59 || minutes < 0 || seconds > 59 || seconds < 0)
     {
@@ -164,23 +157,23 @@ bool Time::operator>=(const Time &rhs) const
 
 Time Time::operator+(int rhs) const
 {
-    return Time::from_seconds(this->to_seconds() + rhs);
+    return from_seconds(this->to_seconds() + rhs);
 }
 
 Time &Time::operator+=(int rhs)
 {
-    *this = Time::from_seconds(this->to_seconds() + rhs);
+    *this = from_seconds(this->to_seconds() + rhs);
     return *this;
 }
 
 Time Time::operator-(int rhs) const
 {
-    return Time::from_seconds(this->to_seconds() - rhs);
+    return from_seconds(this->to_seconds() - rhs);
 }
 
 Time &Time::operator-=(int rhs)
 {
-    *this = Time::from_seconds(this->to_seconds() - rhs);
+    *this = from_seconds(this->to_seconds() - rhs);
     return *this;
 }
 
@@ -211,7 +204,7 @@ int Time::to_seconds() const
     return 3600 * hours + 60 * minutes + seconds;
 }
 
-Time Time::from_seconds(int sum)
+Time from_seconds(int sum)
 {
     sum %= SECONDS_PER_DAY;
     if (sum < 0)
