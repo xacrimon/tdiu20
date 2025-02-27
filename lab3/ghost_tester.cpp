@@ -116,27 +116,26 @@ std::string Ghost_Tester::to_draw(Point const &curr_pos)
 
     for (const Ghost *ghost : ghosts)
     {
-        if (ghost->get_position() == curr_pos)
-        {
-            auto c = ghost->get_color()[0];
-            to_draw[0] = toupper(c);
-        }
+        char c{ghost->get_color()[0]};
+        Point search_point{};
 
         if (scatter)
         {
-            if (ghost->get_scatter_point() == curr_pos)
-            {
-                auto c = ghost->get_color()[0];
-                to_draw[0] = tolower(c);
-            }
+            search_point = ghost->get_scatter_point();
         }
         else
         {
-            if (ghost->get_chase_point() == curr_pos)
-            {
-                auto c = ghost->get_color()[0];
-                to_draw[0] = tolower(c);
-            }
+            search_point = ghost->get_chase_point();
+        }
+
+        if (search_point == curr_pos)
+        {
+            to_draw[0] = c;
+        }
+
+        if (ghost->get_position() == curr_pos)
+        {
+            to_draw[0] = toupper(c);
         }
     }
 
