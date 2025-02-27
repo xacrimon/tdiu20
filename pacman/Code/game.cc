@@ -10,9 +10,11 @@ Game::Game()
 {
     // Lägger till tre dynamiskt allokerade spöken i en vektor.
     // Ett spökes konstruktor tar argumenten (pacman, startposition, scatterposition, + speciella argument). 
-    ghosts.emplace_back(sf::Vector2f{360,  40}, grid, new Blinky{pacman, Point{}, Point{WIDTH, 0}});
+    Blinky * blinky{new Blinky{pacman, Point{}, Point{WIDTH, 0}}};
+    ghosts.emplace_back(sf::Vector2f{360,  40}, grid, blinky);
     ghosts.emplace_back(sf::Vector2f{40 ,  40}, grid, new Pinky {pacman, Point{}, Point{0, 0}});
     ghosts.emplace_back(sf::Vector2f{360, 420}, grid, new Clyde{pacman, Point{}, Point{0, HEIGHT}, 8});
+    ghosts.emplace_back(sf::Vector2f{40 ,  40}, grid, new Inky {pacman, blinky, Point{}, Point{WIDTH, 0}});
     window.setFramerateLimit(FPS);
 }
 
