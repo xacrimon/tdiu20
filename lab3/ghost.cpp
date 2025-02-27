@@ -99,3 +99,22 @@ std::string Clyde::get_color() const
 {
     return std::string{"orange"};
 }
+
+Inky::Inky(Pacman *pacman, Blinky *blinky, Point position, Point scatter_point)
+    : Ghost{pacman, position, scatter_point}, blinky{blinky}
+{
+}
+
+Point Inky::get_chase_point() const
+{
+    Point blinky_point{blinky->get_position()};
+    Point player_pos{pacman->get_position() + pacman->get_direction() * 2};
+    Point chase_point{(player_pos - blinky_point) * 2 + blinky_point};
+
+    return chase_point;
+}
+
+std::string Inky::get_color() const
+{
+    return std::string{"blue"};
+}

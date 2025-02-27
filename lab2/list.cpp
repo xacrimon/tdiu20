@@ -1,6 +1,5 @@
 #include "list.h"
 
-#include <optional>
 #include <iostream>
 #include <stdexcept>
 #include <vector>
@@ -146,11 +145,11 @@ void List::push_back(int elem)
     }
 }
 
-std::optional<int> List::pop_back()
+int List::pop_back()
 {
     if (tail == sentinel)
     {
-        return std::nullopt;
+        throw std::runtime_error("Listan är tom!");
     }
 
     auto node = tail;
@@ -277,27 +276,27 @@ int List::length() const
     return len;
 }
 
-std::optional<int> List::front() const
+int List::front() const
 {
     if (head == sentinel)
     {
-        return std::nullopt;
+        throw std::runtime_error("Listan är tom!");
     }
 
     return head->elem;
 }
 
-std::optional<int> List::back() const
+int List::back() const
 {
     if (tail == sentinel)
     {
-        return std::nullopt;
+        throw std::runtime_error("Listan är tom!");
     }
 
     return tail->elem;
 }
 
-std::optional<int> List::at(int index) const
+int List::at(int index) const
 {
     auto it = begin();
 
@@ -305,7 +304,7 @@ std::optional<int> List::at(int index) const
     {
         if (it == end())
         {
-            return std::nullopt;
+            throw std::runtime_error("Listan är tom!");
         }
 
         it++;

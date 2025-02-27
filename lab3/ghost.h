@@ -61,4 +61,18 @@ private:
     const int threshold;
 };
 
+class Inky : public Ghost
+{
+public:
+    Inky(Pacman *pacman, Blinky *blinky, Point position, Point scatter_point);
+    virtual Point get_chase_point() const override;
+    virtual std::string get_color() const override;
+
+    Inky(const Inky &) = delete;
+    Inky operator=(const Inky &) = delete;
+
+private:
+    Blinky *blinky;
+};
+
 #endif

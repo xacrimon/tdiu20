@@ -1,7 +1,6 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include <optional>
 #include <iostream>
 
 namespace impl
@@ -17,10 +16,7 @@ namespace impl
     {
     public:
         using value_type = int;
-        using difference_type = std::ptrdiff_t;
-        using pointer = int *;
         using reference = int &;
-        using iterator_category = std::bidirectional_iterator_tag;
 
         explicit ListIterator(Node *node);
 
@@ -66,9 +62,9 @@ public:
 
     bool is_empty() const;
     int length() const;
-    std::optional<int> front() const;
-    std::optional<int> back() const;
-    std::optional<int> at(int index) const;
+    int front() const;
+    int back() const;
+    int at(int index) const;
 
     List sub(std::initializer_list<int> indices) const;
 
@@ -77,7 +73,7 @@ public:
 
 private:
     void push_back(int elem);
-    std::optional<int> pop_back();
+    int pop_back();
 
     constexpr static impl::Node *sentinel = &impl::SENTINEL;
     impl::Node *head;

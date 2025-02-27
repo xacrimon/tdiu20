@@ -13,6 +13,11 @@ Point operator+(Point const &lhs, Point const &rhs)
     return Point{lhs.x + rhs.x, lhs.y + rhs.y};
 }
 
+Point operator-(Point const &lhs, Point const &rhs)
+{
+    return Point{lhs.x - rhs.x, lhs.y - rhs.y};
+}
+
 Point operator*(Point const &lhs, int rhs)
 {
     return Point{lhs.x * rhs, lhs.y * rhs};

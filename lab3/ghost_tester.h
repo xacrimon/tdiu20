@@ -18,8 +18,8 @@ public:
     void run();
 
 private:
-    std::string to_draw(Point const &curr_pos);
-    void draw_map();
+    std::string to_draw(Point const &curr_pos) const;
+    void draw_map() const;
 
     void command_pos(std::istringstream &args);
     void command_anger();

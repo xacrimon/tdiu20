@@ -4,9 +4,11 @@ Ghost_Tester::Ghost_Tester()
     : pacman{}, ghosts{}, scatter{false}
 {
     pacman = new Pacman{};
-    ghosts.push_back(new Blinky{pacman, Point{9, 8}, Point{WIDTH - 1, HEIGHT - 1}});
+    Blinky *blinky{new Blinky{pacman, Point{9, 8}, Point{WIDTH - 1, HEIGHT - 1}}};
+    ghosts.push_back(blinky);
     ghosts.push_back(new Pinky{pacman, Point{2, 7}, Point{0, HEIGHT - 1}});
     ghosts.push_back(new Clyde{pacman, Point{8, 2}, Point{0, 0}, 6});
+    ghosts.push_back(new Inky{pacman, blinky, Point{7, 10}, Point{WIDTH - 1, 0}});
 }
 
 Ghost_Tester::~Ghost_Tester()
@@ -51,7 +53,7 @@ void Ghost_Tester::run()
         {
             command_dir(iss);
         }
-        else if (command == "red" || command == "pink" || command == "orange")
+        else if (command == "red" || command == "pink" || command == "orange" || command == "blue")
         {
             command_color(iss, command);
         }
@@ -105,7 +107,7 @@ void Ghost_Tester::command_color(std::istringstream &args, std::string &command)
   En hjälpfunktion som avgör vilka två tecken som ska ritas ut för en given position på
   spelplanen.
 */
-std::string Ghost_Tester::to_draw(Point const &curr_pos)
+std::string Ghost_Tester::to_draw(Point const &curr_pos) const
 {
     std::string to_draw{"  "};
 
@@ -151,7 +153,7 @@ std::string Ghost_Tester::to_draw(Point const &curr_pos)
   Varje punkt i kartan ritas som två tecken eftersom ett tecken i terminalen är ca dubbelt så
   högt som det är brett.
 */
-void Ghost_Tester::draw_map()
+void Ghost_Tester::draw_map() const
 {
     std::cout << "+" << std::setfill('-') << std::setw(WIDTH * 2) << "-" << "+\n";
 
