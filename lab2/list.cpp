@@ -198,7 +198,7 @@ void List::insert(int elem)
             auto node = new impl::Node{elem, current, prev};
             if (current == head)
             {
-                // insert i börjann på listan
+                // insert i början på listan
                 current->prev = node;
                 head = node;
             }
@@ -265,7 +265,7 @@ bool List::is_empty() const
 
 int List::length() const
 {
-    int len = 0;
+    int len{0};
 
     for (const auto &elem : *this)
     {
@@ -361,7 +361,7 @@ std::ostream &operator<<(std::ostream &os, const List &list)
     os << "[";
     auto it = list.begin();
 
-    for (;;)
+    while (true)
     {
         os << *it;
         it++;
