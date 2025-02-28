@@ -109,7 +109,17 @@ Point Inky::get_chase_point() const
 {
     Point blinky_point{blinky->get_position()};
     Point player_pos{pacman->get_position() + pacman->get_direction() * 2};
-    Point chase_point{(player_pos - blinky_point) * 2 + blinky_point};
+    int player_pos_len{player_pos.x * player_pos.x + player_pos.y * player_pos.y};
+    int blinky_point_len{blinky_point.x * blinky_point.x + blinky_point.y * blinky_point.y};
+    Point chase_point{};
+    if (player_pos_len >= blinky_point_len)
+    {
+        chase_point = (player_pos - blinky_point) * 2 + blinky_point;
+    }
+    else
+    {
+        chase_point = (blinky_point - player_pos) * 2 + player_pos;
+    }
 
     return chase_point;
 }
