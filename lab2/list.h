@@ -3,46 +3,9 @@
 
 #include <iostream>
 
-namespace impl
-{
-    struct Node
-    {
-        int elem;
-        Node *next;
-        Node *prev;
-    };
-
-    class ListIterator
-    {
-    public:
-        using value_type = int;
-        using reference = int &;
-
-        explicit ListIterator(Node *node);
-
-        reference operator*() const;
-
-        ListIterator &operator++();
-        ListIterator operator++(int);
-
-        ListIterator &operator--();
-        ListIterator operator--(int);
-
-        bool operator==(const ListIterator &rhs);
-        bool operator!=(const ListIterator &rhs);
-
-    private:
-        Node *curr;
-    };
-
-    static impl::Node SENTINEL = impl::Node{0, nullptr, nullptr};
-}
-
 class List
 {
 public:
-    using iterator = impl::ListIterator;
-
     List();
     List(std::initializer_list<int> elems);
 
@@ -68,16 +31,21 @@ public:
 
     List sub(std::initializer_list<int> indices) const;
 
-    iterator begin() const;
-    iterator end() const;
-
 private:
+    struct Node
+    {
+        int elem;
+        Node *next;
+        Node *prev;
+    };
+
     void push_back(int elem);
     int pop_back();
+    void add_node(Node *curr_node, Node *new_node);
+    void remove_node(Node *node);
+    Node *self_referencing();
 
-    constexpr static impl::Node *sentinel = &impl::SENTINEL;
-    impl::Node *head;
-    impl::Node *tail;
+    Node *sentinel;
 };
 
 std::ostream &operator<<(std::ostream &os, const List &list);

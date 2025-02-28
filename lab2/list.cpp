@@ -2,84 +2,44 @@
 
 #include <iostream>
 #include <stdexcept>
-#include <vector>
 #include <algorithm>
 
-impl::ListIterator::ListIterator(Node *node)
-    : curr{node}
+List::Node *List::self_referencing()
 {
-}
-
-impl::ListIterator::reference impl::ListIterator::operator*() const
-{
-    return curr->elem;
-}
-
-impl::ListIterator &impl::ListIterator::operator++()
-{
-    curr = curr->next;
-    return *this;
-}
-
-impl::ListIterator impl::ListIterator::operator++(int)
-{
-    ListIterator tmp = *this;
-    curr = curr->next;
-    return tmp;
-}
-
-impl::ListIterator &impl::ListIterator::operator--()
-{
-    curr = curr->prev;
-    return *this;
-}
-
-impl::ListIterator impl::ListIterator::operator--(int)
-{
-    ListIterator tmp = *this;
-    curr = curr->prev;
-    return tmp;
-}
-
-bool impl::ListIterator::operator==(const ListIterator &rhs)
-{
-    return curr == rhs.curr;
-}
-
-bool impl::ListIterator::operator!=(const ListIterator &rhs)
-{
-    return curr != rhs.curr;
+    Node *sentinel = new Node{0, nullptr, nullptr};
+    sentinel->prev = sentinel;
+    sentinel->next = sentinel;
+    return sentinel;
 }
 
 List::List()
-    : head{nullptr}, tail{nullptr}
+    : sentinel{nullptr}
 {
-    head = sentinel;
-    tail = sentinel;
+    sentinel = self_referencing();
 }
 
 List::List(std::initializer_list<int> elems)
-    : head{nullptr}, tail{nullptr}
+    : sentinel{nullptr}
 {
-    head = sentinel;
-    tail = sentinel;
+    sentinel = self_referencing();
 
     for (auto v : elems)
     {
-        push_back(v);
+        insert(v);
     }
 }
 
 // special: copy constructor
 List::List(List const &other)
-    : head{nullptr}, tail{nullptr}
+    : sentinel{nullptr}
 {
-    head = sentinel;
-    tail = sentinel;
+    sentinel = self_referencing();
 
-    for (const auto &elem : other)
+    Node *curr{other.sentinel->next};
+    while (curr != other.sentinel)
     {
-        push_back(elem);
+        curr = curr->next;
+        push_back(curr->elem);
     }
 }
 
@@ -91,9 +51,11 @@ List &List::operator=(List const &rhs)
         pop_back();
     }
 
-    for (const auto &elem : rhs)
+    Node *curr{rhs.sentinel->next};
+    while (curr != rhs.sentinel)
     {
-        push_back(elem);
+        curr = curr->next;
+        push_back(curr->elem);
     }
 
     return *this;
@@ -110,12 +72,11 @@ List::~List()
 
 // special: move constructor
 List::List(List &&other)
-    : head{nullptr}, tail{nullptr}
+    : sentinel{nullptr}
 {
-    head = other.head;
-    tail = other.tail;
-    other.tail = sentinel;
-    other.head = sentinel;
+    Node *empty_list_sentinel = self_referencing();
+    sentinel = other.sentinel;
+    other.sentinel = empty_list_sentinel;
 }
 
 // special: move assignment
@@ -126,43 +87,43 @@ List &List::operator=(List &&rhs)
         pop_back();
     }
 
-    head = rhs.head;
-    tail = rhs.tail;
-    rhs.tail = sentinel;
-    rhs.head = sentinel;
-
+    Node *empty_list_sentinel = self_referencing();
+    sentinel = rhs.sentinel;
+    rhs.sentinel = empty_list_sentinel;
     return *this;
+}
+
+void List::add_node(Node *curr_node, Node *new_node)
+{
+    new_node->next = curr_node->next;
+    new_node->prev = curr_node;
+    curr_node->next->prev = new_node;
+    curr_node->next = new_node;
+}
+
+void List::remove_node(Node *node)
+{
+    if (node == sentinel)
+    {
+        throw std::runtime_error("kan inte ta bort sentinel!");
+    }
+
+    node->prev->next = node->next;
+    node->next->prev = node->prev;
+    node->prev = nullptr;
+    node->next = nullptr;
 }
 
 void List::push_back(int elem)
 {
-    auto node = new impl::Node{elem, sentinel, tail};
-    tail->next = node;
-    tail = node;
-    if (head == sentinel)
-    {
-        head = tail;
-    }
+    auto node = new Node{elem, nullptr, nullptr};
+    add_node(sentinel->prev, node);
 }
 
 int List::pop_back()
 {
-    if (tail == sentinel)
-    {
-        throw std::runtime_error("Listan är tom!");
-    }
-
-    auto node = tail;
-    tail = tail->prev;
-    if (tail == sentinel)
-    {
-        head = sentinel;
-    }
-    else
-    {
-        tail->next = sentinel;
-    }
-
+    auto node = sentinel->prev;
+    remove_node(node);
     auto elem = node->elem;
     delete node;
     return elem;
@@ -170,106 +131,59 @@ int List::pop_back()
 
 void List::insert(int elem)
 {
-    auto prev = sentinel;
-    auto current = head;
+    Node *new_node = new Node{elem, nullptr, nullptr};
 
-    while (true)
+    Node *curr{sentinel->next};
+
+    if (sentinel == curr)
     {
-        if (current == sentinel)
-        {
-            auto node = new impl::Node{elem, sentinel, prev};
-            if (head == sentinel)
-            {
-                // listan är tom
-                head = node;
-                tail = node;
-            }
-            else if (tail == prev)
-            {
-                // vi är i slutet på listan
-                prev->next = node;
-                tail = node;
-            }
-
-            break;
-        }
-        else if (elem < current->elem)
-        {
-            auto node = new impl::Node{elem, current, prev};
-            if (current == head)
-            {
-                // insert i början på listan
-                current->prev = node;
-                head = node;
-            }
-
-            prev->next = node;
-            current->prev = node;
-            break;
-        }
-
-        prev = current;
-        current = current->next;
+        add_node(sentinel, new_node);
+        return;
     }
+
+    while (curr != sentinel)
+    {
+        if (elem > curr->elem)
+        {
+            add_node(curr, new_node);
+            break;
+        }
+
+        curr = curr->next;
+    }
+
+    // TODO: specialfall
 }
 
 void List::remove(int index)
 {
-    if (is_empty())
-    {
-        throw std::logic_error("listan är tom!");
-    }
-
-    auto prev = sentinel;
-    auto current = head;
-
+    Node *curr{sentinel->next};
     for (int i{0}; i < index; i++)
     {
-        prev = current;
-        current = current->next;
-
-        if (current == sentinel)
+        if (curr == sentinel)
         {
-            throw std::logic_error("index fanns ej i listan!");
+            // TODO: error
         }
+
+        curr = curr->next;
     }
 
-    if (current->next == sentinel)
-    {
-        // slutet på listan
-        pop_back();
-        return;
-    }
-
-    auto unlinked = current;
-    current = current->next;
-    if (prev != sentinel)
-    {
-        // ej början på listan
-        prev->next = current;
-    }
-    else
-    {
-        // början på listan
-        head = current;
-    }
-
-    current->prev = prev;
-    delete unlinked;
+    remove_node(curr);
 }
 
 bool List::is_empty() const
 {
-    return head == sentinel;
+    return sentinel == sentinel->next;
 }
 
 int List::length() const
 {
     int len{0};
 
-    for (const auto &elem : *this)
+    Node *curr{sentinel->next};
+    while (curr != sentinel)
     {
-        (void)elem;
+        curr = curr->next;
         len++;
     }
 
@@ -278,101 +192,86 @@ int List::length() const
 
 int List::front() const
 {
-    if (head == sentinel)
+    if (sentinel == sentinel->next)
     {
         throw std::runtime_error("Listan är tom!");
     }
 
-    return head->elem;
+    return sentinel->next->elem;
 }
 
 int List::back() const
 {
-    if (tail == sentinel)
+    if (sentinel == sentinel->prev)
     {
         throw std::runtime_error("Listan är tom!");
     }
 
-    return tail->elem;
+    return sentinel->prev->elem;
 }
 
 int List::at(int index) const
 {
-    auto it = begin();
-
-    for (int i = 0; i < index; i++)
+    Node *curr{sentinel->prev};
+    for (int i{0}; i < index; i++)
     {
-        if (it == end())
+        if (curr == sentinel)
         {
-            throw std::runtime_error("Listan är tom!");
+            // TODO: error
         }
 
-        it++;
+        curr = curr->prev;
     }
 
-    return *it;
+    return curr->elem;
 }
 
 List List::sub(std::initializer_list<int> indices) const
 {
-    auto is_sorted = std::is_sorted(indices.begin(), indices.end());
-    if (!is_sorted)
-    {
-        throw std::logic_error("index ej sorterade!");
-    }
-
-    List sub;
-    auto curr_idx = 0;
-    auto it = begin();
-
-    for (const auto &index : indices)
-    {
-        auto diff = index - curr_idx;
-
-        for (int i = 0; i < diff; i++)
-        {
-            if (it == end())
-            {
-                throw std::runtime_error("givna index fanns ej i listan!");
-            }
-
-            it++;
-            curr_idx++;
-        }
-
-        sub.push_back(*it);
-    }
-
-    return sub;
-}
-
-List::iterator List::begin() const
-{
-    return List::iterator{head};
-}
-
-List::iterator List::end() const
-{
-    return List::iterator{sentinel};
+    // auto is_sorted = std::is_sorted(indices.begin(), indices.end());
+    // if (!is_sorted)
+    //{
+    //     throw std::logic_error("index ej sorterade!");
+    // }
+    //
+    // List sub;
+    // auto curr_idx = 0;
+    // auto it = begin();
+    //
+    // for (const auto &index : indices)
+    //{
+    //    auto diff = index - curr_idx;
+    //
+    //    for (int i = 0; i < diff; i++)
+    //    {
+    //        if (it == end())
+    //        {
+    //            throw std::runtime_error("givna index fanns ej i listan!");
+    //        }
+    //
+    //        it++;
+    //        curr_idx++;
+    //    }
+    //
+    //    sub.push_back(*it);
+    //}
+    //
+    // return sub;
+    return List{};
 }
 
 std::ostream &operator<<(std::ostream &os, const List &list)
 {
     os << "[";
-    auto it = list.begin();
 
-    while (true)
+    auto len = list.length();
+    for (int i{0}; i < len; i++)
     {
-        os << *it;
-        it++;
+        os << list.at(i);
 
-        if (it != list.end())
+        if (i != len - 1)
         {
             os << ", ";
-        }
-        else
-        {
-            break;
         }
     }
 
