@@ -38,8 +38,8 @@ List::List(List const &other)
     Node *curr{other.sentinel->next};
     while (curr != other.sentinel)
     {
-        curr = curr->next;
         push_back(curr->elem);
+        curr = curr->next;
     }
 }
 
@@ -54,8 +54,8 @@ List &List::operator=(List const &rhs)
     Node *curr{rhs.sentinel->next};
     while (curr != rhs.sentinel)
     {
-        curr = curr->next;
         push_back(curr->elem);
+        curr = curr->next;
     }
 
     return *this;
@@ -143,16 +143,17 @@ void List::insert(int elem)
 
     while (curr != sentinel)
     {
-        if (elem > curr->elem)
+        if (elem <= curr->elem)
         {
-            add_node(curr, new_node);
-            break;
+            add_node(curr->prev, new_node);
+            return;
         }
 
         curr = curr->next;
     }
 
-    // TODO: specialfall
+    // Slutet på listan
+    add_node(sentinel->prev, new_node);
 }
 
 void List::remove(int index)
@@ -212,7 +213,7 @@ int List::back() const
 
 int List::at(int index) const
 {
-    Node *curr{sentinel->prev};
+    Node *curr{sentinel->next};
     for (int i{0}; i < index; i++)
     {
         if (curr == sentinel)
@@ -220,7 +221,7 @@ int List::at(int index) const
             // TODO: error
         }
 
-        curr = curr->prev;
+        curr = curr->next;
     }
 
     return curr->elem;
@@ -228,36 +229,35 @@ int List::at(int index) const
 
 List List::sub(std::initializer_list<int> indices) const
 {
-    // auto is_sorted = std::is_sorted(indices.begin(), indices.end());
-    // if (!is_sorted)
-    //{
-    //     throw std::logic_error("index ej sorterade!");
-    // }
-    //
-    // List sub;
-    // auto curr_idx = 0;
-    // auto it = begin();
-    //
-    // for (const auto &index : indices)
-    //{
-    //    auto diff = index - curr_idx;
-    //
-    //    for (int i = 0; i < diff; i++)
-    //    {
-    //        if (it == end())
-    //        {
-    //            throw std::runtime_error("givna index fanns ej i listan!");
-    //        }
-    //
-    //        it++;
-    //        curr_idx++;
-    //    }
-    //
-    //    sub.push_back(*it);
-    //}
-    //
-    // return sub;
-    return List{};
+    bool is_sorted = std::is_sorted(indices.begin(), indices.end());
+    if (!is_sorted)
+    {
+        throw std::logic_error("index ej sorterade!");
+    }
+
+    List sub;
+    auto curr_idx = 0;
+    Node *curr{sentinel->next};
+
+    for (const auto &index : indices)
+    {
+        auto diff = index - curr_idx;
+
+        for (int i = 0; i < diff + 1; i++)
+        {
+            if (curr == sentinel)
+            {
+                throw std::runtime_error("givna index fanns ej i listan!");
+            }
+
+            curr = curr->next;
+            curr_idx++;
+        }
+
+        sub.push_back(curr->prev->elem);
+    }
+
+    return sub;
 }
 
 std::ostream &operator<<(std::ostream &os, const List &list)
