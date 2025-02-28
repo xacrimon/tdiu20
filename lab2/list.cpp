@@ -68,6 +68,8 @@ List::~List()
     {
         pop_back();
     }
+
+    delete sentinel;
 }
 
 // special: move constructor
@@ -86,6 +88,8 @@ List &List::operator=(List &&rhs)
     {
         pop_back();
     }
+
+    delete sentinel;
 
     Node *empty_list_sentinel = self_referencing();
     sentinel = rhs.sentinel;
@@ -170,6 +174,7 @@ void List::remove(int index)
     }
 
     remove_node(curr);
+    delete curr;
 }
 
 bool List::is_empty() const
