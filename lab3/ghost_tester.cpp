@@ -17,6 +17,8 @@ Ghost_Tester::~Ghost_Tester()
     {
         delete ghost;
     }
+
+    delete pacman;
 }
 
 void Ghost_Tester::run()
