@@ -26,7 +26,7 @@ lab1: $(call objs,lab1)
 build/lab1: | build
 	mkdir build/lab1
 
-build/lab1/%.o: lab1/%.cpp | build/lab1
+build/lab1/%.o: lab1/%.cpp lab1/%.h | build/lab1
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 .PHONY: lab1/test
@@ -42,7 +42,7 @@ lab2: $(call objs,lab2)
 build/lab2: | build
 	mkdir build/lab2
 
-build/lab2/%.o: lab2/%.cpp | build/lab2
+build/lab2/%.o: lab2/%.cpp lab2/%.h | build/lab2
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 .PHONY: lab2/test
@@ -58,7 +58,7 @@ lab3: $(call objs,lab3)
 build/lab3: | build
 	mkdir build/lab3
 
-build/lab3/%.o: lab3/%.cpp | build/lab3
+build/lab3/%.o: lab3/%.cpp lab3/%.h | build/lab3
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 .PHONY: lab3/test
