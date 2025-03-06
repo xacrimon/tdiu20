@@ -96,12 +96,6 @@ void List::insert(int elem)
 
     Node *curr{sentinel->next};
 
-    if (sentinel == curr)
-    {
-        add_node(sentinel, new_node);
-        return;
-    }
-
     while (curr != sentinel)
     {
         if (elem <= curr->elem)

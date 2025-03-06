@@ -1,8 +1,9 @@
+#ifndef GHOST_TESTER_H
+#define GHOST_TESTER_H
+
 #include <string>
-#include <iomanip>
 #include <sstream>
 #include <vector>
-#include <memory>
 
 #include "ghost.h"
 
@@ -31,3 +32,5 @@ private:
 
     bool scatter;
 };
+
+#endif

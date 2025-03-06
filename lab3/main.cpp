@@ -1,8 +1,3 @@
-#include <string>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-
 #include "ghost_tester.h"
 
 /*

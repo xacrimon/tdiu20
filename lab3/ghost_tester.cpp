@@ -1,5 +1,8 @@
 #include "ghost_tester.h"
 
+#include <iostream>
+#include <iomanip>
+
 Ghost_Tester::Ghost_Tester()
     : pacman{}, ghosts{}, scatter{false}
 {
