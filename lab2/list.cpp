@@ -214,21 +214,21 @@ std::string List::to_string() const
 
 List List::sub(std::initializer_list<int> indices) const
 {
-    bool is_sorted = std::is_sorted(indices.begin(), indices.end());
+    bool is_sorted{std::is_sorted(indices.begin(), indices.end())};
     if (!is_sorted)
     {
         throw std::logic_error("Index ej sorterade!");
     }
 
-    List sub;
-    auto curr_idx = 0;
+    List sub{};
+    int curr_idx{};
     Node *curr{sentinel->next};
 
-    for (const auto &index : indices)
+    for (const int &index : indices)
     {
-        auto diff = index - curr_idx;
+        int diff{index - curr_idx};
 
-        for (int i = 0; i < diff + 1; i++)
+        for (int i{}; i < diff + 1; i++)
         {
             if (curr == sentinel)
             {
