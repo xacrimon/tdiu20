@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
+#include <sstream>
 
 List::List()
     : sentinel{nullptr}
@@ -188,6 +189,29 @@ int List::at(int index) const
     return curr->elem;
 }
 
+std::string List::to_string() const
+{
+    std::stringstream ss{};
+
+    ss << "[";
+
+    Node *curr{sentinel->next};
+    while (curr != sentinel)
+    {
+        ss << curr->elem;
+
+        if (curr->next != sentinel)
+        {
+            ss << ", ";
+        }
+
+        curr = curr->next;
+    }
+
+    ss << "]";
+    return ss.str();
+}
+
 List List::sub(std::initializer_list<int> indices) const
 {
     bool is_sorted = std::is_sorted(indices.begin(), indices.end());
@@ -267,19 +291,7 @@ List::Node *List::self_referencing()
 
 std::ostream &operator<<(std::ostream &os, const List &list)
 {
-    os << "[";
+    os << list.to_string();
 
-    auto len = list.length();
-    for (int i{0}; i < len; i++)
-    {
-        os << list.at(i);
-
-        if (i != len - 1)
-        {
-            os << ", ";
-        }
-    }
-
-    os << "]";
     return os;
 }

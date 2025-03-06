@@ -2,6 +2,7 @@
 #define LIST_H
 
 #include <iostream>
+#include <string>
 
 class List
 {
@@ -28,6 +29,8 @@ public:
     int front() const;
     int back() const;
     int at(int index) const;
+
+    std::string to_string() const;
 
     List sub(std::initializer_list<int> indices) const;
 
