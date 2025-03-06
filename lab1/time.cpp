@@ -7,7 +7,7 @@
 
 // Komplettering: Kasta alltid ett faktiskt undantag.
 
-#include "time.hpp"
+#include "time.h"
 
 const int SECONDS_PER_DAY{24 * 60 * 60};
 

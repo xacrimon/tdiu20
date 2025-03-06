@@ -29,6 +29,9 @@ build/lab1: | build
 build/lab1/%.o: lab1/%.cpp lab1/%.h | build/lab1
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
+build/lab1/test.o: lab1/test.cpp| build/lab1
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
 .PHONY: lab1/test
 lab1/test: build/lab1/test
 	./build/lab1/test
@@ -45,6 +48,9 @@ build/lab2: | build
 build/lab2/%.o: lab2/%.cpp lab2/%.h | build/lab2
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
+build/lab2/test.o: lab2/test.cpp | build/lab2
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
 .PHONY: lab2/test
 lab2/test: build/lab2/test
 	./build/lab2/test
@@ -59,6 +65,9 @@ build/lab3: | build
 	mkdir build/lab3
 
 build/lab3/%.o: lab3/%.cpp lab3/%.h | build/lab3
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+build/lab3/main.o: lab3/main.cpp | build/lab3
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 .PHONY: lab3/test
