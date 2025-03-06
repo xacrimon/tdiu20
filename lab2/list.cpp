@@ -123,7 +123,7 @@ void List::remove(int index)
     {
         if (curr == sentinel)
         {
-            // TODO: error
+            throw std::runtime_error("Index finns inte i listan!");
         }
 
         curr = curr->next;
@@ -179,7 +179,7 @@ int List::at(int index) const
     {
         if (curr == sentinel)
         {
-            // TODO: error
+            throw std::runtime_error("Index finns inte i listan!");
         }
 
         curr = curr->next;
@@ -193,7 +193,7 @@ List List::sub(std::initializer_list<int> indices) const
     bool is_sorted = std::is_sorted(indices.begin(), indices.end());
     if (!is_sorted)
     {
-        throw std::logic_error("index ej sorterade!");
+        throw std::logic_error("Index ej sorterade!");
     }
 
     List sub;
@@ -208,7 +208,7 @@ List List::sub(std::initializer_list<int> indices) const
         {
             if (curr == sentinel)
             {
-                throw std::runtime_error("givna index fanns ej i listan!");
+                throw std::runtime_error("Givna index fanns ej i listan!");
             }
 
             curr = curr->next;
@@ -248,7 +248,7 @@ void List::remove_node(Node *node)
 {
     if (node == sentinel)
     {
-        throw std::runtime_error("kan inte ta bort sentinel!");
+        throw std::runtime_error("Kan inte ta bort sentinel!");
     }
 
     node->prev->next = node->next;
