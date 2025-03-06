@@ -4,14 +4,6 @@
 #include <stdexcept>
 #include <algorithm>
 
-List::Node *List::self_referencing()
-{
-    Node *sentinel = new Node{0, nullptr, nullptr};
-    sentinel->prev = sentinel;
-    sentinel->next = sentinel;
-    return sentinel;
-}
-
 List::List()
     : sentinel{nullptr}
 {
@@ -95,42 +87,6 @@ List &List::operator=(List &&rhs)
     sentinel = rhs.sentinel;
     rhs.sentinel = empty_list_sentinel;
     return *this;
-}
-
-void List::add_node(Node *curr_node, Node *new_node)
-{
-    new_node->next = curr_node->next;
-    new_node->prev = curr_node;
-    curr_node->next->prev = new_node;
-    curr_node->next = new_node;
-}
-
-void List::remove_node(Node *node)
-{
-    if (node == sentinel)
-    {
-        throw std::runtime_error("kan inte ta bort sentinel!");
-    }
-
-    node->prev->next = node->next;
-    node->next->prev = node->prev;
-    node->prev = nullptr;
-    node->next = nullptr;
-}
-
-void List::push_back(int elem)
-{
-    auto node = new Node{elem, nullptr, nullptr};
-    add_node(sentinel->prev, node);
-}
-
-int List::pop_back()
-{
-    auto node = sentinel->prev;
-    remove_node(node);
-    auto elem = node->elem;
-    delete node;
-    return elem;
 }
 
 void List::insert(int elem)
@@ -263,6 +219,50 @@ List List::sub(std::initializer_list<int> indices) const
     }
 
     return sub;
+}
+
+void List::push_back(int elem)
+{
+    auto node = new Node{elem, nullptr, nullptr};
+    add_node(sentinel->prev, node);
+}
+
+int List::pop_back()
+{
+    auto node = sentinel->prev;
+    remove_node(node);
+    auto elem = node->elem;
+    delete node;
+    return elem;
+}
+
+void List::add_node(Node *curr_node, Node *new_node)
+{
+    new_node->next = curr_node->next;
+    new_node->prev = curr_node;
+    curr_node->next->prev = new_node;
+    curr_node->next = new_node;
+}
+
+void List::remove_node(Node *node)
+{
+    if (node == sentinel)
+    {
+        throw std::runtime_error("kan inte ta bort sentinel!");
+    }
+
+    node->prev->next = node->next;
+    node->next->prev = node->prev;
+    node->prev = nullptr;
+    node->next = nullptr;
+}
+
+List::Node *List::self_referencing()
+{
+    Node *sentinel = new Node{0, nullptr, nullptr};
+    sentinel->prev = sentinel;
+    sentinel->next = sentinel;
+    return sentinel;
 }
 
 std::ostream &operator<<(std::ostream &os, const List &list)
