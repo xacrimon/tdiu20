@@ -2,8 +2,10 @@
 
 #include <iostream>
 #include <stdexcept>
-#include <algorithm>
 #include <sstream>
+
+// Komplettering (bonus): Det är inte tillåtet att använda komponenter från standardbiblioteket
+//   (utöver std::initalizer_list) för att lösa uppgiften.
 
 List::List()
     : sentinel{nullptr}
@@ -208,10 +210,14 @@ std::string List::to_string() const
 
 List List::sub(std::initializer_list<int> indices) const
 {
-    bool is_sorted{std::is_sorted(indices.begin(), indices.end())};
-    if (!is_sorted)
+    int prev_index{-1};
+    for (const int &index : indices)
     {
-        throw std::logic_error("Index ej sorterade!");
+        if (index < prev_index)
+        {
+            throw std::logic_error("Index ej sorterade!");
+        }
+        prev_index = index;
     }
 
     List sub{};
