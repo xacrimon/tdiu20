@@ -210,23 +210,20 @@ std::string List::to_string() const
 
 List List::sub(std::initializer_list<int> indices) const
 {
+    List sub{};
+    int curr_idx{};
+    Node *curr{sentinel->next};
     int prev_index{-1};
+
     for (const int &index : indices)
     {
+        int diff{index - curr_idx};
+
         if (index < prev_index)
         {
             throw std::logic_error("Index ej sorterade!");
         }
         prev_index = index;
-    }
-
-    List sub{};
-    int curr_idx{};
-    Node *curr{sentinel->next};
-
-    for (const int &index : indices)
-    {
-        int diff{index - curr_idx};
 
         for (int i{}; i < diff + 1; i++)
         {
