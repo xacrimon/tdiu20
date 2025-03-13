@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <stdexcept>
 
 // Komplettering: Testprogrammet ska vara generellt och hantera ett godtyckligt antal spöken.
 // Kommentar: Det är generellt sätt bra att bryta ut funktioner som ni gör för
@@ -14,15 +15,9 @@
 // Kommentar: Om man kan göra en range-based for loop istället för en vanlig
 // for loop så bör man göra det då det är säkrare (i command_anger())
 
-Ghost_Tester::Ghost_Tester()
-    : pacman{}, ghosts{}, scatter{false}
+Ghost_Tester::Ghost_Tester(Pacman *pacman)
+    : pacman{pacman}, ghosts{}, scatter{false}
 {
-    pacman = new Pacman{};
-    Blinky *blinky{new Blinky{pacman, Point{9, 8}, Point{WIDTH - 1, HEIGHT - 1}}};
-    ghosts.push_back(blinky);
-    ghosts.push_back(new Pinky{pacman, Point{2, 7}, Point{0, HEIGHT - 1}});
-    ghosts.push_back(new Clyde{pacman, Point{8, 2}, Point{0, 0}, 6});
-    ghosts.push_back(new Inky{pacman, blinky, Point{7, 10}, Point{WIDTH - 1, 0}});
 }
 
 Ghost_Tester::~Ghost_Tester()
@@ -69,29 +64,40 @@ void Ghost_Tester::run()
         {
             command_dir(iss);
         }
-        else if (command == "red" || command == "pink" || command == "orange" || command == "blue")
-        {
-            command_color(iss, command);
-        }
         else if (command == "quit")
         {
             break;
         }
+        else
+        {
+            command_color(iss, command);
+        }
     }
+}
+
+void Ghost_Tester::add_ghost(Ghost *ghost)
+{
+    for (Ghost *ghost_ : ghosts)
+    {
+        if (ghost_->get_color() == ghost->get_color())
+        {
+            throw std::runtime_error("Spöket finns redan i testprogrammet!");
+        }
+    }
+
+    ghosts.push_back(ghost);
 }
 
 void Ghost_Tester::command_pos(std::istringstream &args)
 {
-    Point new_pos{};
-    args >> new_pos.x >> new_pos.y;
-    pacman->set_position(new_pos);
+    pacman->set_position(get_point(args));
 }
 
 void Ghost_Tester::command_anger()
 {
-    for (std::size_t i{0}; i < ghosts.size(); ++i)
+    for (Ghost *ghost : ghosts)
     {
-        Blinky *b{dynamic_cast<Blinky *>(ghosts.at(i))};
+        Blinky *b{dynamic_cast<Blinky *>(ghost)};
         if (b != nullptr)
         {
             b->set_angry(true);
@@ -101,9 +107,7 @@ void Ghost_Tester::command_anger()
 
 void Ghost_Tester::command_dir(std::istringstream &args)
 {
-    Point new_dir{};
-    args >> new_dir.x >> new_dir.y;
-    pacman->set_direction(new_dir);
+    pacman->set_direction(get_point(args));
 }
 
 void Ghost_Tester::command_color(std::istringstream &args, std::string &command)
@@ -112,11 +116,16 @@ void Ghost_Tester::command_color(std::istringstream &args, std::string &command)
     {
         if (ghost->get_color() == command)
         {
-            Point new_pos{};
-            args >> new_pos.x >> new_pos.y;
-            ghost->set_position(new_pos);
+            ghost->set_position(get_point(args));
         }
     }
+}
+
+Point Ghost_Tester::get_point(std::istringstream &args)
+{
+    Point point{};
+    args >> point.x >> point.y;
+    return point;
 }
 
 /*

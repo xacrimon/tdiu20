@@ -1,3 +1,6 @@
+#ifndef GIVEN_H
+#define GIVEN_H
+
 // TODO: skydd för dubbel inkludering
 
 // Komplettering: Läs(och fixa) ovanstående TODO.
@@ -59,3 +62,5 @@ private:
   Point pos{};
   Point dir{};
 };
+
+#endif

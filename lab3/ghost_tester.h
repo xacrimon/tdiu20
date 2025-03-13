@@ -10,13 +10,15 @@
 class Ghost_Tester
 {
 public:
-    Ghost_Tester();
+    Ghost_Tester(Pacman *pacman);
     ~Ghost_Tester();
 
     Ghost_Tester(const Ghost_Tester &) = delete;
     Ghost_Tester operator=(const Ghost_Tester &) = delete;
 
     void run();
+
+    void add_ghost(Ghost *ghost);
 
 private:
     std::string to_draw(Point const &curr_pos) const;
@@ -26,6 +28,8 @@ private:
     void command_anger();
     void command_dir(std::istringstream &args);
     void command_color(std::istringstream &args, std::string &command);
+
+    Point get_point(std::istringstream &args);
 
     Pacman *pacman;
     std::vector<Ghost *> ghosts;

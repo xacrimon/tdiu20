@@ -1,17 +1,24 @@
 #include "ghost.h"
 
 #include <cmath>
+#include <stdexcept>
 
 // Komplettering: set_position behöver kontrollera att den inskickade positionen är inom spelplanen och informera anropande kod.
 // Komplettering: Konstruktorn behöver kontrollera att den inskickade positionen är inom spelplanen och informera anropande kod.
 
-Ghost::Ghost(Pacman *pacman, Point position, Point scatter_point)
-    : pacman{pacman}, position{position}, scatter_point{scatter_point}
+Ghost::Ghost(Pacman *pacman, const Point &position, const Point &scatter_point)
+    : pacman{pacman}, position{}, scatter_point{scatter_point}
 {
+    set_position(position);
 }
 
 void Ghost::set_position(Point pos)
 {
+    if (pos.x < 0 || pos.x >= WIDTH || pos.y < 0 || pos.y >= HEIGHT)
+    {
+        throw std::runtime_error("Positionen är utanför spelplanen!");
+    }
+
     position = pos;
 }
 
@@ -25,7 +32,7 @@ Point Ghost::get_scatter_point() const
     return scatter_point;
 }
 
-Blinky::Blinky(Pacman *pacman, Point position, Point scatter_point)
+Blinky::Blinky(Pacman *pacman, const Point &position, const Point &scatter_point)
     : Ghost{pacman, position, scatter_point}, angry{false}
 {
 }
@@ -62,7 +69,7 @@ void Blinky::set_angry(bool angry)
     this->angry = angry;
 }
 
-Pinky::Pinky(Pacman *pacman, Point position, Point scatter_point)
+Pinky::Pinky(Pacman *pacman, const Point &position, const Point &scatter_point)
     : Ghost{pacman, position, scatter_point}
 {
 }
@@ -77,7 +84,7 @@ std::string Pinky::get_color() const
     return std::string{"pink"};
 }
 
-Clyde::Clyde(Pacman *pacman, Point start_position, Point scatter_point, int threshold)
+Clyde::Clyde(Pacman *pacman, const Point &start_position, const Point &scatter_point, int threshold)
     : Ghost{pacman, start_position, scatter_point}, threshold{threshold}
 {
 }
@@ -103,7 +110,7 @@ std::string Clyde::get_color() const
     return std::string{"orange"};
 }
 
-Inky::Inky(Pacman *pacman, Blinky *blinky, Point position, Point scatter_point)
+Inky::Inky(Pacman *pacman, Blinky *blinky, const Point &position, const Point &scatter_point)
     : Ghost{pacman, position, scatter_point}, blinky{blinky}
 {
 }
