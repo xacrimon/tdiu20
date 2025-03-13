@@ -3,6 +3,17 @@
 #include <iostream>
 #include <iomanip>
 
+// Komplettering: Testprogrammet ska vara generellt och hantera ett godtyckligt antal spöken.
+// Kommentar: Det är generellt sätt bra att bryta ut funktioner som ni gör för
+// att flytta spöken if-satsen innan ni kör kommandot gör dock så att man måste
+// uppdatera den varje man lägger till ett nytt spöke. Gör ni inte den checken
+// i for-loopen?
+
+// Komplettering: Kodupprepning i funktionerna för pos, dir och flytta spöken.
+
+// Kommentar: Om man kan göra en range-based for loop istället för en vanlig
+// for loop så bör man göra det då det är säkrare (i command_anger())
+
 Ghost_Tester::Ghost_Tester()
     : pacman{}, ghosts{}, scatter{false}
 {

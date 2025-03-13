@@ -2,6 +2,9 @@
 
 #include <cmath>
 
+// Komplettering: set_position behöver kontrollera att den inskickade positionen är inom spelplanen och informera anropande kod.
+// Komplettering: Konstruktorn behöver kontrollera att den inskickade positionen är inom spelplanen och informera anropande kod.
+
 Ghost::Ghost(Pacman *pacman, Point position, Point scatter_point)
     : pacman{pacman}, position{position}, scatter_point{scatter_point}
 {

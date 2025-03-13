@@ -1,5 +1,7 @@
 // TODO: skydd för dubbel inkludering
 
+// Komplettering: Läs(och fixa) ovanstående TODO.
+
 /*
   I denna fil finns ett utval av kod från det dina kollegor skrivit till ert pacman-projekt. Det är
   precis det som du behöver för att skriva din del av koden.

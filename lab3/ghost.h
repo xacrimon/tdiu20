@@ -5,6 +5,10 @@
 
 #include <string>
 
+// Komplettering: Parameteröverföring av sammansatta datatyper ska om möjligt ske som konstant referens.
+
+// Kommentar: Använd inte pekare om det inte är nödvändigt. För Pacman-medlemmen kan en referens användas.
+
 class Ghost
 {
 public:
